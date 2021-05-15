@@ -17,18 +17,8 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
 
 
-    def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
 
 
     def __str__(self):
         return self.id
 
-class OrderItem(models.Model):
-    order=models.ForeignKey(Order,related_name='profile_order',on_delete=models.CASCADE)
-    item=models.ForeignKey(Item,related_name='item_order',on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    quantity=models.PositiveIntegerField(default=1)
-
-    def get_cost(self):
-        return self.price * self.quantity
