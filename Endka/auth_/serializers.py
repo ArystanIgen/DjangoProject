@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from auth_.models import UserNew,Profile
 from django.contrib.auth.password_validation import validate_password
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password=serializers.CharField(max_length=120,min_length=8,write_only=True,validators=[validate_password])
@@ -17,9 +21,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             username=validated_data['username']
-        )
-        profile=Profile.objects.create(
-            user=user,
         )
         return user
 
@@ -54,6 +55,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data['password1'])
         instance.save()
 
+        logger.info(f"Paasword change, user: {user}")
         return instance
 
 
@@ -82,6 +84,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.profile.pk != instance.pk:
+            logger.error('Other person tried to enter!')
             raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
 
         instance.first_name = validated_data['first_name']
@@ -89,6 +92,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.phone_number = validated_data['phone_number']
         instance.save()
 
+        logger.info(f"Profile information change, user: {user}")
         return instance
 
 class UserSerializer(serializers.ModelSerializer):

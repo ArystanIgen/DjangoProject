@@ -6,6 +6,11 @@ from rest_framework import status
 from rest_framework.generics import UpdateAPIView,RetrieveAPIView
 from .serializers import RegistrationSerializer,ChangePasswordSerializer,UpdateUserSerializer,UserSerializer
 from .models import UserNew,Profile
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 
 class RegistrationAPIView(APIView):
     permission_classes = (AllowAny,)
@@ -18,6 +23,7 @@ class RegistrationAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
+        logger.info(f"Registered new user, ID: {serializer.data['id']}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -33,11 +39,6 @@ class UpdateProfileView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UpdateUserSerializer
 
-class Logout(APIView):
-    def get(self, request, format=None):
-        # simply delete the token to force a login
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
 
 class UserDetail(RetrieveAPIView):
     queryset = Profile.objects.all()
@@ -46,5 +47,7 @@ class UserDetail(RetrieveAPIView):
     def get(self,request,pk,*args, **kwargs):
         profile=UserNew.objects.get(pk=pk)
         if request.user.profile.pk!= profile.pk:
+
             return Response(status=status.HTTP_423_LOCKED)
+
         return self.retrieve(request, *args, **kwargs)

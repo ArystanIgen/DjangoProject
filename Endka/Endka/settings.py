@@ -135,12 +135,20 @@ LOGGING = {
         }
     },
     'loggers': {
-        'main': {
+        'service': {
             'handlers': ['file_handler', 'console_handler'],
             'level': 'DEBUG',
         },
         'auth_': {
             'handlers': ['console_handler'],
+            'level': 'DEBUG',
+        },
+        'cart': {
+            'handlers': ['console_handler'],
+            'level': 'DEBUG',
+         },
+        'orders': {
+            'handlers': [ 'console_handler'],
             'level': 'DEBUG',
         },
     },

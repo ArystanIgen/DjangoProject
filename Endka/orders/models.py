@@ -22,13 +22,14 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 class OrderItem(models.Model):
     order=models.ForeignKey(Order,related_name='profile_order',on_delete=models.CASCADE)
     item=models.ForeignKey(Item,related_name='item_order',on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     quantity=models.PositiveIntegerField(default=1)
+    owner=models.ForeignKey(Profile,related_name='profile_order',on_delete=models.CASCADE)
 
     def get_cost(self):
         return self.price * self.quantity

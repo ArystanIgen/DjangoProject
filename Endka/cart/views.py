@@ -20,7 +20,6 @@ class CartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         a = self.request.user.profile
-
         return Cart.objects.filter(customer=a.id)
 
     @action(methods=['post', 'put'],detail=True)
@@ -32,9 +31,11 @@ class CartViewSet(viewsets.ModelViewSet):
         cart_item = CartItem.objects.filter(cart=cart,item=item).first()
         if cart_item:
             cart_item.quantity += quantity
+            logger.info(f"Quantity have been changed, ID: {cart_item.cart}")
             cart_item.save()
         else:
             new_cart_item = CartItem(cart=cart, item=item, quantity=quantity)
+            logger.info(f"Created new cart item ID: {new_cart_item.cart}")
             new_cart_item.save()
 
         serializer = CartSerializer(cart)
@@ -47,9 +48,11 @@ class CartViewSet(viewsets.ModelViewSet):
 
         cart_item = CartItem.objects.filter(cart=cart, item=item).first()
         if cart_item==1:
+            logger.info(f"Deletion of cart item, ID: {cart_item.cart}")
             cart_item.delete()
         else:
             cart_item.quantity=-1
+            logger.info(f"Reducing quantity, ID: {cart_item.cart}")
             cart_item.save()
         serializer = CartSerializer(cart)
         return Response(serializer.data)
