@@ -11,7 +11,9 @@ from .serializers import *
 from rest_framework import status
 from .models import Cart,CartItem
 from rest_framework import viewsets
+import logging
 
+logger = logging.getLogger(__name__)
 
 class CartViewSet(viewsets.ModelViewSet):
 

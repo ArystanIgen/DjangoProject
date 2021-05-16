@@ -10,7 +10,7 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class CartItem(models.Model):
-    customer = models.ForeignKey(Profile, related_name='cart_items', on_delete=models.CASCADE)
+
     cart = models.ForeignKey(Cart,related_name='cart_items',on_delete=models.CASCADE)
     item = models.ForeignKey(Item,related_name='items',on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)

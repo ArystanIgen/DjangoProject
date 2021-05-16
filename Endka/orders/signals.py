@@ -8,5 +8,5 @@ from orders.models import *
 @receiver(post_save, sender=OrderItem)
 def order_created(sender, instance, created, **kwargs):
     if created:
-        CartItem.objects.filter(customer=instance).delete()
+        CartItem.objects.filter(cart=instance.carts).delete()
 
