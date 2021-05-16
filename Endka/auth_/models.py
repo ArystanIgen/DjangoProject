@@ -8,7 +8,7 @@ USER_1=1
 USER_2=2
 USER_3=3
 USER_ROLES=(
-    (USER_1, 'Guest'),
+    (USER_1, 'Client'),
     (USER_2,'Business_account'),
     (USER_3,'Admin')
 )

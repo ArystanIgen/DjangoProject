@@ -23,7 +23,7 @@ class RegistrationAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        logger.info(f"Registered new user, ID: {serializer.data['id']}")
+        logger.info(f"Registered new user, user: {user}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
